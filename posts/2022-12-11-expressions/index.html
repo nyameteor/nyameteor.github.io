@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2022-12-11" />
+  <title>CS61A - Expressions</title>
+  <link rel="stylesheet" href="../../../style/main.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CS61A - Expressions</h1>
+<p class="date">2022-12-11 </p>
+</header>
+<h2 id="elements-of-programming">Elements of Programming</h2>
+<p>TextBook: <a
+href="http://composingprograms.com/pages/12-elements-of-programming.html"
+class="uri">http://composingprograms.com/pages/12-elements-of-programming.html</a></p>
+<h3 id="expressions">Expressions</h3>
+<p>An expression describes a computation and evaluates to a value.</p>
+<h3 id="call-expression">Call Expression</h3>
+<p>All expressions can use function call notation.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> operator <span class="im">import</span> add, mul</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> mul(add(<span class="dv">2</span>, mul(<span class="dv">4</span>, <span class="dv">6</span>)), add(<span class="dv">3</span>, <span class="dv">5</span>))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dv">208</span></span></code></pre></div>
+<h3 id="anatomy-of-a-call-expression">Anatomy of a Call Expression</h3>
+<pre class="text"><code>    add     (      2      ,       3     )
+     |             |              |
+  Operator      Operand        Operand</code></pre>
+<p>To evaluate nested expressions, we can use an
+<code>expression tree</code> to visualize the evaluation procedures.</p>
+<h3 id="pure-and-non-pure-functions">Pure and Non-pure Functions</h3>
+<p><strong>Pure functions</strong> (just return values)</p>
+<p>functions have some input and return some output.</p>
+<p>E.g., <code>abs</code> is a pure function.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">abs</span>(<span class="op">-</span><span class="dv">2</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span></span></code></pre></div>
+<p><strong>Non-pure functions</strong> (have side effects)</p>
+<p>In addition to returning a value, applying a non-pure function can
+generate side effects, which make some change to the state of the
+interpreter.</p>
+<p>E.g., <code>print</code> function is a non-pure function, beyond the
+return value <code>None</code>, the side effect is to generate
+additional ouput.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span></span></code></pre></div>
+<p>A nested expression of calls to print highlights the non-pure
+character of the function.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="bu">print</span>(<span class="dv">1</span>), <span class="bu">print</span>(<span class="dv">2</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="va">None</span> <span class="va">None</span></span></code></pre></div>
+<p>We can draw an expression tree to visualize:</p>
+<pre class="text"><code>                    None
+           print(print(1), print(2))
+           /       |          \
+          /        |           \
+         /         |            \
+  `print(...)`   None           None
+          `print(...)` `1`  `print(...)` `2`</code></pre>
+<ol type="1">
+<li>Evaluates the operator <code>function print</code>.</li>
+<li>Evaluates the first operand, which is another call expression:
+<ol type="1">
+<li>Evaluates the operator <code>function print</code>.</li>
+<li>Evaluates the operand <code>1</code>.</li>
+<li>Apply operand to operator, it display <code>1</code> and return
+<code>None</code>.</li>
+</ol></li>
+<li>Evaluates the second operand, which is another call expression:
+<ol type="1">
+<li>Evaluates the operator <code>function print</code>.</li>
+<li>Evaluates the operand <code>2</code>.</li>
+<li>Apply operand to operator, it display <code>2</code> and return
+<code>None</code>.</li>
+</ol></li>
+<li>Apply operands to operator, it display <code>None None</code> and
+return <code>None</code>.</li>
+</ol>
+<hr />
+<a href="/index.html">←返回上一页</a>
+</body>
+</html>

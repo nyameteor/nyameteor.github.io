@@ -1,0 +1,27 @@
+/*
+* References: https://gist.github.com/killercup/5917178
+*/
+
+html,
+body {
+  font-family: sans-serif;
+  font-size: 16px;
+  line-height: 1.5em;
+}
+
+body {
+  margin: 0em auto 3em auto;
+  padding: 2em 2em;
+  max-width: 42em;
+}
+
+pre {
+  word-wrap: normal;
+}
+
+/* Adaptive for mobile device */
+@media only screen and (max-width: 480px) {
+  body {
+    padding: 1.5em 1.5em;
+  }
+}
