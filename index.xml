@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Mirage Log</title>
+        <atom:link href="https://nyameteor.github.io/index.xml" rel="self" type="application/rss+xml" />
+        <link>https://nyameteor.github.io/</link>
+        <description>Mirage Log</description>
+    <item>
+        <title>CS61B - Gitlet Design Document</title>
+        <link>https://nyameteor.github.io/posts/2023-07-12-gitlet/index.html</link>
+        <pubDate>Wed, 12 Jul 2023 00:00:00 -0000</pubDate>
+        <guid>https://nyameteor.github.io/posts/2023-07-12-gitlet/index.html</guid>
+    </item>
+    <item>
+        <title>CS61A - Programs as Data</title>
+        <link>https://nyameteor.github.io/posts/2023-02-05-programs-as-data/index.html</link>
+        <pubDate>Sun, 05 Feb 2023 00:00:00 -0000</pubDate>
+        <guid>https://nyameteor.github.io/posts/2023-02-05-programs-as-data/index.html</guid>
+    </item>
+    <item>
+        <title>CS61A - Objects</title>
+        <link>https://nyameteor.github.io/posts/2023-01-02-objects/index.html</link>
+        <pubDate>Mon, 02 Jan 2023 00:00:00 -0000</pubDate>
+        <guid>https://nyameteor.github.io/posts/2023-01-02-objects/index.html</guid>
+    </item>
+    <item>
+        <title>CS61A - Expressions</title>
+        <link>https://nyameteor.github.io/posts/2022-12-11-expressions/index.html</link>
+        <pubDate>Sun, 11 Dec 2022 00:00:00 -0000</pubDate>
+        <guid>https://nyameteor.github.io/posts/2022-12-11-expressions/index.html</guid>
+    </item>
+    <item>
+        <title>黑猫</title>
+        <link>https://nyameteor.github.io/posts/2022-11-28-black-cat/index.html</link>
+        <pubDate>Mon, 28 Nov 2022 00:00:00 -0000</pubDate>
+        <guid>https://nyameteor.github.io/posts/2022-11-28-black-cat/index.html</guid>
+    </item>
+    <item>
+        <title>构建博客的尝试</title>
+        <link>https://nyameteor.github.io/posts/2021-01-01-blog/index.html</link>
+        <pubDate>Fri, 01 Jan 2021 00:00:00 -0000</pubDate>
+        <guid>https://nyameteor.github.io/posts/2021-01-01-blog/index.html</guid>
+    </item>
+    <item>
+        <title>读《天国就在你们心中》</title>
+        <link>https://nyameteor.github.io/posts/2020-07-11-life/index.html</link>
+        <pubDate>Sat, 11 Jul 2020 00:00:00 -0000</pubDate>
+        <guid>https://nyameteor.github.io/posts/2020-07-11-life/index.html</guid>
+    </item>
+    </channel>
+</rss>

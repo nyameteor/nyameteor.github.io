@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2021-01-01" />
+  <title>构建博客的尝试</title>
+  <link rel="stylesheet" href="../../../style/main.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">构建博客的尝试</h1>
+<p class="date">2021-01-01 </p>
+</header>
+<p>读了奈卜拉先生的 <a
+href="https://blog.nebula.moe/posts/%E6%88%91%E6%98%AF%E6%80%8E%E4%B9%88%E5%86%99%E5%8D%9A%E5%AE%A2%E7%9A%84/">我是怎么写博客的</a>，便也想回顾下自己构建博客的一些尝试。感谢奈卜拉先生，您精彩的博文给予我许多帮助。</p>
+<h2 id="静态网站生成器">静态网站生成器</h2>
+<p>静态网站生成器（static site generator）可以将轻量的标记文本（如
+Markdown）转换为标准的标记文本（如 HTML），其中 Hugo 和 Hexo
+在博客构建中似乎很流行。</p>
+<h3 id="hexo">Hexo</h3>
+<p>我首先尝试了 Hexo，因为网络上 Hexo
+的中文教程非常丰富，还有很多酷炫的主题。 但也许是因为 NPM
+的依赖管理并不理想，在遇到一个依赖包版本导致生成文档失败的 bug
+后，我暂时放弃了它， 前后断断续续尝试了几个月，期间使用了主题 <a
+href="https://github.com/xzhih/hexo-theme-casper">casper</a>。</p>
+<h3 id="hugo">Hugo</h3>
+<p>与 Hexo 对比，我感觉 Hugo 构建的速度更快，且 Hugo 对 RSS
+提供了良好的支持，内置的模板几乎开箱即用。
+我在使用过程中没遇到什么问题，大约尝试了半年，期间使用了主题 <a
+href="https://github.com/olOwOlo/hugo-theme-even">Even</a>。</p>
+<h2 id="pandoc">Pandoc</h2>
+<p>Hexo 和 Hugo
+虽然轻量，但定制主题与插件也并不轻松，我开始期望有更轻量的构建方式。</p>
+<p>2020 年初偶然发现<a
+href="https://i.nebula.moe/about/">奈卜拉</a>先生的博客，给我留下了深刻的印象：文章是主体，页面简洁，没有喧宾夺主的元素，没有额外的认知负担。
+从 Ta 的博文中，我学习了开源文档转换器 <a
+href="https://pandoc.org/">Pandoc</a> 的使用。 写了个脚本用 Pandoc
+批量转换 Markdown 为 HTML，抄了一份不错的 <a
+href="https://gist.github.com/killercup/5917178">CSS</a>
+修了修，就是现在的模样了。 这个方式目前已经用了 3 个月。</p>
+<hr />
+<a href="/index.html">←返回上一页</a>
+</body>
+</html>

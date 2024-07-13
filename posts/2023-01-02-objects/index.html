@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2023-01-02" />
+  <title>CS61A - Objects</title>
+  <link rel="stylesheet" href="../../../style/main.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CS61A - Objects</h1>
+<p class="date">2023-01-02 </p>
+</header>
+<h2 id="objects">Objects</h2>
+<p>Textbook: <a
+href="http://composingprograms.com/pages/25-object-oriented-programming.html"
+class="uri">http://composingprograms.com/pages/25-object-oriented-programming.html</a></p>
+<h3 id="object-oriented-programming">Object-Oriented Programming</h3>
+<p>A method for organizing modular programs</p>
+<ul>
+<li>Abstraction barriers</li>
+<li>Bundling together information and related behavior</li>
+</ul>
+<p>A metaphor for computation using distributed state</p>
+<ul>
+<li>Each object has its own local state.</li>
+<li>Each object also knows how to manage its own local state, based on
+method calls.</li>
+<li>Method calls are <code>messages</code> passed between objects.</li>
+</ul>
+<h3 id="classes">Classes</h3>
+<p>A class serves as a template for its instances.</p>
+<pre class="text"><code>class &lt;name&gt;:
+    &lt;suite&gt;   --&gt; The suite is executed immediately when the class statement is executed.</code></pre>
+<h3 id="methods">Methods</h3>
+<p>Methods are defined in the suite of a class statement.</p>
+<p>These def statements create function objects as always, but their
+names are bound as attributes of the class.</p>
+<p>All invoked methods have access to the object via the
+<code>self</code> parameter, and so they can all access and manipulate
+the object’s state.</p>
+<h3 id="attributes">Attributes</h3>
+<p>All objects have attributes, which are name-value pairs.</p>
+<ul>
+<li>Instance attribute: attribute of an instance</li>
+<li>Class attribute: attribute of the class of an instance</li>
+</ul>
+<h2 id="inheritance">Inheritance</h2>
+<p>Textbook: <a
+href="http://composingprograms.com/pages/25-object-oriented-programming.html"
+class="uri">http://composingprograms.com/pages/25-object-oriented-programming.html</a></p>
+<h3 id="inheritance-1">Inheritance</h3>
+<p>Inheritance is a method for relating classes together.</p>
+<p>A subclass <code>inherits</code> the attributes of its base
+class.</p>
+<pre class="text"><code>class &lt;name&gt;(&lt;base class&gt;):
+    &lt;suite&gt;</code></pre>
+<p>Looking Up Attribute Names on Classes</p>
+<p>To look up a name in a class:</p>
+<ol type="1">
+<li>if it names an attribute in the class, return the attribute
+value.</li>
+<li>Otherwise, look up the name in the base class recursively, if there
+is one.</li>
+</ol>
+<h3 id="object-oriented-design">Object-Oriented Design</h3>
+<p>Inheritance and Composition</p>
+<p>Inheritance is best for representing <code>is-a</code>
+relationships.</p>
+<ul>
+<li><p>E.g., a cheking account <code>is a</code> specialized type of
+account.</p>
+<p>So, CheckingAccount inherits from Account.</p></li>
+</ul>
+<p>Composition is best for representing <code>has-a</code>
+relationships.</p>
+<ul>
+<li><p>E.g., a bank <code>has a</code> collection of bank accounts it
+manages.</p>
+<p>So, A bank has a list of accounts as an attribute.</p></li>
+</ul>
+<h3 id="multiple-inheritance">Multiple Inheritance</h3>
+<p>Python supports the concept of a subclass inheriting attributes from
+multiple base classes, a language feature called
+<code>multiple inheritance</code>.</p>
+<p>Python resolves this name using a recursive algorithm called the C3
+Method Resolution Order. The method resolution order can be queried
+using the <code>mro</code> method on all classes.</p>
+<p>Original paper: <a
+href="http://python-history.blogspot.com/2010/06/method-resolution-order.html"
+class="uri">http://python-history.blogspot.com/2010/06/method-resolution-order.html</a></p>
+<h2 id="representation">Representation</h2>
+<p>Textbook: <a
+href="http://composingprograms.com/pages/27-object-abstraction.html"
+class="uri">http://composingprograms.com/pages/27-object-abstraction.html</a></p>
+<h3 id="string-representations">String Representations</h3>
+<p>In Python, all objects produce two string representations:</p>
+<ul>
+<li><p>The <code>str</code> is legible to humans.</p></li>
+<li><p>The <code>repr</code> is legible to the Python interpreter.</p>
+<p><code>repr(obj)</code> return the canonical string representation of
+the object. For many object types,
+<code>eval(repr(obj)) == obj</code>.</p></li>
+</ul>
+<h3 id="polymorphic-functions">Polymorphic Functions</h3>
+<p>Polymorphic function: A function that applies to many (poly)
+different forms (morph) of data.</p>
+<p>E.g., <code>str</code> and <code>repr</code> are both polymorphic,
+they apply to any object.</p>
+<h3 id="interfaces">Interfaces</h3>
+<p><strong>Message passing:</strong> Objects interact by looking up
+attributes on each other (passing messages).</p>
+<p>The attribute look-up rules allow different data types to respond to
+the same message.</p>
+<p>A <strong>shared message</strong> (attribute name) can elicit similar
+behavior from different objects.</p>
+<p>An <strong>interface</strong> is a set of shared messages, along with
+a specification of what they mean.</p>
+<p>Example:</p>
+<p>Classes that implement <code>__repr__</code> and <code>__str__</code>
+methods that return Python-interpretable and human-readable strings
+implement an interface for producing string representations.</p>
+<h3 id="special-method-names-particular-to-python-language">Special
+Method Names (Particular to Python Language)</h3>
+<p>Certain names are special because they have built-in behavior.</p>
+<p>References:</p>
+<ul>
+<li><a
+href="http://getpython3.com/diveintopython3/special-method-names.html"
+class="uri">http://getpython3.com/diveintopython3/special-method-names.html</a></li>
+<li><a
+href="https://docs.python.org/3/reference/datamodel.html#special-method-names"
+class="uri">https://docs.python.org/3/reference/datamodel.html#special-method-names</a></li>
+</ul>
+<hr />
+<a href="/index.html">←返回上一页</a>
+</body>
+</html>
