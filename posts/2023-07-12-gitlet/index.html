@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2023-07-12" />
+  <title>CS61B - Gitlet Design Document</title>
+  <link rel="stylesheet" href="../../../style/main.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CS61B - Gitlet Design Document</h1>
+<p class="date">2023-07-12 </p>
+</header>
+<h2 id="classes-and-data-structures">Classes and Data Structures</h2>
+<h3 id="blob">Blob</h3>
+<p>A <code>blob</code> object is used to store file data.</p>
+<h3 id="tree">Tree</h3>
+<p>A <code>tree</code> object is used to store directory
+information.</p>
+<p>Example content:</p>
+<pre class="text"><code>blob    &lt;id1&gt;    file1.txt
+tree    &lt;id2&gt;    dir1</code></pre>
+<h3 id="commit">Commit</h3>
+<p>A <code>commit</code> object points to a single <code>tree</code>
+object, and contains other meta-information.</p>
+<h3 id="index">Index</h3>
+<p>The <code>index</code> containing a tree of cached files in current
+working tree. It has these properties:</p>
+<ul>
+<li>The index contains all the information necessary to generate a
+single <code>tree</code> object.</li>
+<li>The index can compare between the <code>tree</code> object and the
+working tree.</li>
+</ul>
+<p>Example content:</p>
+<pre class="text"><code>                   CWD
+                 /     \
+                /       \
+               /         \
+              /           \
+            dir1         file1.txt,
+           /   \           &lt;id1&gt;
+          /     \
+         /       \
+        /         \
+   file2.txt,  file3.txt,
+     &lt;id2&gt;      &lt;id3&gt;</code></pre>
+<h3 id="branch">Branch</h3>
+<p>A <code>branch</code> containing a pointer to a branch.</p>
+<h3 id="head">Head</h3>
+<p>The <code>head</code> containing a pointer to current branch.
+According to the specification, in Gitlet, we will never be in a
+detached HEAD state since there is no <code>checkout</code> command that
+will move the HEAD pointer to a specific commit.</p>
+<h2 id="algorithms">Algorithms</h2>
+<h3 id="finding-split-point">Finding split point</h3>
+<p>The split point is the <strong>latest common ancestor</strong> of two
+branch heads.</p>
+<pre class="text"><code>      A---B---C---D  other
+     /         \
+E---F---G---H---I---J  main</code></pre>
+<p>In the above example, the split point of <code>main</code> and
+<code>other</code> is <code>C</code>.</p>
+<p>We can treat this problem as get first <strong>intersection of two
+linked lists</strong> if each node has only one parent node, but in git,
+a commit node may have multiple parent nodes. Currently, I just use
+<code>DFS</code> to get all intersections of two branches. And the
+intersection with minimum <code>step</code> is the split point. This
+method is slow and may need refactoring.</p>
+<h3 id="comparing-two-trees">Comparing two trees</h3>
+<p>To get the modified, added and deleted files between two commits, We
+need to compare the two trees of these two commits.</p>
+<pre class="text"><code>                   CWD                                     CWD
+                 /     \                                 /     \
+                /       \                               /       \
+               /         \                             /         \
+              /           \                           /           \
+            dir1         file1.txt,                 dir1         file1.txt,
+           &lt;id4&gt;           &lt;id1&gt;                   &lt;id7&gt;           &lt;id5&gt;
+           /   \                                   /   \
+          /     \                                 /     \
+         /       \                               /       \
+        /         \                             /         \
+   file2.txt,  file3.txt,                  file2.txt,  file4.txt,
+     &lt;id2&gt;       &lt;id3&gt;                       &lt;id6&gt;       &lt;id3&gt;
+
+                fromTree                                 toTree</code></pre>
+<p>In the above example, the modified files are
+<code>["file1.txt", "dir1/file2.txt"]</code>, the added files are
+<code>["dir1/file4.txt"]</code>, the deleted files are
+<code>["dir1/file3.txt"]</code>(actually <code>"dir1/file3.txt"</code>
+is renamed, but in Gitlet we treat it as being deleted and then
+added).</p>
+<p>We can write a recursive function to compare the
+<code>fromTree</code> and <code>toTree</code>, start with
+<code>diff(fromNode, toNode)</code> (some helpful arguments are not
+represented):</p>
+<ul>
+<li>If <code>fromNode</code> is null and <code>toNode</code> is not
+null.
+<ul>
+<li>If <code>toNode</code> is a blob, add it to
+<code>addedFiles</code>.</li>
+<li>Else, call <code>diff(null, childToNode)</code> for each childNode
+in <code>childToNodes</code>.</li>
+</ul></li>
+<li>Else, if <code>fromNode</code> is not null and <code>toNode</code>
+is null.
+<ul>
+<li>If <code>fromNode</code> is a blob, add it to
+<code>deletedFiles</code>.</li>
+<li>Else, call <code>diff(childFromNode, null)</code> for each childNode
+in <code>childFromNodes</code>.</li>
+</ul></li>
+<li>Else, if both nodes exist (Note that when calling this function, we
+will ensure that two existing nodes have the same name):
+<ul>
+<li>If two nodes have the same id, we can just return.</li>
+<li>Else, if both nodes are blobs, add <code>toNode</code> to
+<code>modifiedFiles</code>.</li>
+<li>Else, if both nodes are trees:
+<ul>
+<li>call <code>diff(childFromNode, childToNode)</code> for each
+childNodes with same name.</li>
+<li>call <code>diff(childFromNode, null)</code> for each childNode only
+present in <code>childFromNodes</code>.</li>
+<li>call <code>diff(null, childToNode)</code> for each childNode only
+present in <code>childToNodes</code>.</li>
+</ul></li>
+<li>Else:
+<ul>
+<li>call <code>diff(fromNode, null)</code>.</li>
+<li>call <code>diff(null, toNode)</code>.</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="persistence">Persistence</h2>
+<pre class="text"><code>CWD/                            # Current working directory
+  .gitlet/                      # All persistence data for Gitlet
+    HEAD                        # Pointer to current branch
+    index                       # Index as a staging area
+    objects/[0-9a-f][0-9a-f]/   # Objects (blobs, trees, commits)
+    refs/                       # References
+      heads/&lt;name&gt;              # Pointers to branches
+      global-log                # Pointers to all commits (DOES NOT exist in real git)</code></pre>
+<h2 id="references">References</h2>
+<ul>
+<li><a
+href="https://sp21.datastructur.es/materials/proj/proj2/proj2">Gitlet
+Specification</a></li>
+<li><a
+href="https://book.git-scm.com/book/en/v2/Git-Internals-Git-Objects">Git
+Internals - Git Objects</a></li>
+<li><a href="https://git-scm.com/docs/gitrepository-layout">Git
+Repository Layout</a></li>
+</ul>
+<hr />
+<a href="/index.html">←返回上一页</a>
+</body>
+</html>
